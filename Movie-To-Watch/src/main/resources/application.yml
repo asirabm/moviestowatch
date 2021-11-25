@@ -1,0 +1,34 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: Iv1.67464d62a6714940
+            client-secret: 5d16783f601f8252363b321be93cbb07df6fe5d5
+       
+           
+  
+        
+          facebook:
+              clientId: 618775282582262
+              clientSecret: f38c55bab79124ec981cd4291b3fe74a
+              scope:
+                - email
+                - public_profile
+            
+            
+  
+            
+            
+            
+ 
+  datasource:
+     driverClassName: com.mysql.jdbc.Driver
+     url: jdbc:mysql://localhost:3306/movietowatch1
+     username: root
+     password: 
+  jpa:
+    hibernate.ddl-auto: update
+    generate-ddl: true
+    show-sql: true            

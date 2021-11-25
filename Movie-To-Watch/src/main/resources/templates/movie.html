@@ -1,0 +1,33 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <head>
+    <title>Movies List</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" media="all" 
+          href="../../css/gtvg.css" th:href="@{/css/gtvg.css}" />
+  </head>
+<body>
+<div th:insert="component/nav.html::search-panel"></div>
+
+<div class="card-group">
+ <div class="card" style="flex: 0 0 18%; margin:10px" th:each="asir:${movies}">
+ <a th:href="@{'/movie/'+${asir.id}}">
+  <img th:href="@{'/movie/'+${asir.id}}"  th:src="${asir.poster_path}" class="card-img-top" th:alt="${asir.poster_path}">
+ </a>
+  <div class="card-body">
+    <h5 th:text="${asir.title}" class="card-title">Card title</h5>
+    <p th:text="${asir.overview}" class="card-text"></p>
+    <a th:href="@{'/movie/'+${asir.id}}" class="btn btn-primary">View Movie</a>
+  </div>
+</div>
+
+</div>
+
+
+
+
+</body>
+</html>
