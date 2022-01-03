@@ -31,6 +31,9 @@ import reactor.netty.http.client.HttpClient;
 public class MovieControl {
 	@Autowired
 	MovieRepo movi;
+	
+
+	
 	WebClient webclient;
 	private final String movieurl="https://api.themoviedb.org/3/search/movie";
 	private String poster_url;
@@ -47,12 +50,33 @@ public class MovieControl {
 	
 	 
 	@GetMapping("/search/")
-	public String getMovies(Model model,@RequestParam("query") String query) {
-        Mono<Result> monomovie= webclient.get()
-         .uri("?api_key=a288e1f8b4ac86ceb7b0dc6078901a88&query={query}",query)
+	public String getMovies(Model model,@RequestParam(defaultValue ="asbcjkasbcjkasbjkc") String query,@RequestParam("p") String page) {
+       System.out.println(query+" "+"kncaksjcnkasjnckjsnacknsak");
+		if(query=="asbcjkasbcjkasbjkc") {
+    	  // System.out.println("hihihihihihihihihihihih");
+    	   return "movienotfound";
+       }
+		
+		
+		Mono<Result> monomovie= webclient.get()
+         .uri("?api_key=a288e1f8b4ac86ceb7b0dc6078901a88&query={query}&page={page}",query,page)
          .retrieve()
          .bodyToMono(Result.class);
+     
         Result result=monomovie.block();
+      
+        
+        
+        if(result.getResults().isEmpty()) {
+        	System.out.println(result.getResults().isEmpty());
+        	System.out.println("asjkdnasjkncjkancjknadcj dcndsc sdcn sd csdncosd csdncosd ");
+        	return "movienotfound";
+        }
+        
+        
+        
+        
+        else {
      
         List<Results> movies=result.getResults();
        movies= movies.stream().map(
@@ -73,14 +97,18 @@ public class MovieControl {
        
        
       
+       model.addAttribute("q",query);
        
-       
-       
-        
+       model.addAttribute("result",monomovie.block());
+      // model.addAttribute("b",raingservice);
         
        System.out.println(movies.get(0).getPoster_path());
         model.addAttribute("movies", movies);
         //movies.forEach(t->System.out.println(t));
-		return "movie";
+       
+        
+        
+		return "movie2";
+        }
 	}
 }

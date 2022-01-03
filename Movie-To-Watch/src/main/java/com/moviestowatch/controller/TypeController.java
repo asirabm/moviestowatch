@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -28,7 +29,8 @@ public class TypeController {
 	
 
 	 @GetMapping("/getmoviesbytypes")
-	 public String getmoviesbytypes(@RequestParam("la") String la,@RequestParam("ge") String ge,Model model) {
+	 public String getmoviesbytypes(@RequestParam("l") String la,@RequestParam("g") String ge,Model model,@RequestParam("p") String page) {
+		System.out.println(page);
 		 //System.out.println(gen+" "+lan);
 		 
 		/* Mono<Result> monores=this.webclient.get()
@@ -42,7 +44,8 @@ public class TypeController {
 		*/
 		 
 		 
-	 
+	 model.addAttribute("l",la);
+	 model.addAttribute("g",ge);
 		
 				 
 		
@@ -54,9 +57,9 @@ public class TypeController {
 				 
 		 
 		 Mono<Result> result = webclient.get()
-		         .uri("?api_key=a288e1f8b4ac86ceb7b0dc6078901a88&with_genres={gen}&with_original_language={name}&page=1", ge,la).
+		         .uri("?api_key=a288e1f8b4ac86ceb7b0dc6078901a88&with_genres={gen}&with_original_language={name}&page={page}", ge,la,page).
 		         retrieve().bodyToMono(Result.class);
-		 result.block().getResults().forEach(t->System.out.println(t.getTitle()));
+		 //result.block().getResults().forEach(t->System.out.println(t.getTitle()));
 		 
 		 
 		 
@@ -65,26 +68,34 @@ public class TypeController {
 		 
 		 //System.out.println(ge+" " + la);
 		 
-		 List<Results> listmovie=result.block().getResults();
-		 listmovie= listmovie.stream().map(t->{
-		     if( t.getPoster_path()!=null) {
-		    	 t.setPoster_path(coverURL+t.getPoster_path());
-		    	 System.out.println(t.getPoster_path());
-		     }
-		     else {
-		    	 t.setPoster_path("/images/no-image.png");
-		     }
-				 
-				return t; 
-		 } ).collect(Collectors.toList());
+		 if(result.block().getResults().isEmpty()) {
+			 return "movienotfound";
+		 }
 		 
 		 
-		 
-		 
-		 
-		 model.addAttribute("movies",listmovie);
-		 
-		 return "movie";
+		 else {
+			 List<Results> listmovie=result.block().getResults();
+			 listmovie= listmovie.stream().map(t->{
+			     if( t.getPoster_path()!=null) {
+			    	 t.setPoster_path(coverURL+t.getPoster_path());
+			    	 System.out.println(t.getPoster_path());
+			     }
+			     else {
+			    	 t.setPoster_path("/images/no-image.png");
+			     }
+					 
+					return t; 
+			 } ).collect(Collectors.toList());
+			 
+			 
+			 
+			 
+			 
+			 model.addAttribute("movies",listmovie);
+			 model.addAttribute("result",result.block());
+			 
+			 return "movie";
+		 }
 		 
 		 
 	 }

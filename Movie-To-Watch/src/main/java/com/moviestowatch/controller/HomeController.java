@@ -42,16 +42,14 @@ import reactor.core.publisher.Mono;
  public class HomeController {
 	@Autowired
 	UserMovieRepo usermovierepo;
+	String id;
+	String type;
 	
 	@Autowired
 	UserMovieRatingRepo usermovieratingrepo;
-	
-	
-	
-	
 	private String coverUrl="https://image.tmdb.org/t/p/w185/";
-	
 	WebClient webclient;
+	
 	
 	WebClient webclient2;
 	public HomeController (WebClient.Builder webclientbuilder) {
@@ -65,27 +63,30 @@ import reactor.core.publisher.Mono;
 				.build();
 		*/
 	}
-	
-	
-	
-	
-	
-	
-	
 	 @RequestMapping("/")
 	    public String home(@AuthenticationPrincipal OAuth2User principal, Model model) {
-	        if (principal == null || principal.getAttribute("login") == null) {
-	        	System.out.println("Heleleleleleel");
-	            return "index";
-	        }
-	
+		 
+		 
+		 if(principal.getAttribute("iss")!=null) {
+			 type="Google";
+			 id=principal.getAttribute("email");
+		 }
+		 else if(principal.getAttribute("login")!=null) {
+			 type="GitHub";
+			 id=principal.getAttribute("login");
+		 }	
+	        if (principal == null ) {
+	        	
+	    return "index";
+	  }
 	        
 	        
-	 principal.getAttributes().forEach((t,u)->System.out.println(t));
-	 String email=principal.getAttribute("email");
-	 String name=principal.getAttribute("name");
-	 String id=principal.getAttribute("login");
-	Optional<List<UserMovie>> oplist= usermovierepo.findByUsername(id);
+	        
+	        
+	        
+	        
+	//String id=principal.getAttribute("login");
+	Optional<List<UserMovie>> oplist= usermovierepo.findByUsernameAndLogType(id,type);
 	
 	if(oplist.isPresent()) {
 		List<Movies> listmovies=oplist.get().stream().map(t->
@@ -99,7 +100,11 @@ import reactor.core.publisher.Mono;
 		   {
 			//y.getRating();
 			return y.getRating();
-		   }).average();
+		   }).filter(f->f>0).
+				   
+				   
+				   
+				   average();
 		   
 		   
 		   od.getAsDouble();

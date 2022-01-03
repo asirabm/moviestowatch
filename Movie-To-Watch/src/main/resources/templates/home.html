@@ -16,20 +16,20 @@
   
 
    <div>
-    <select   name="ge"  id="ge">
+    <select   name="g"  id="g">
     <option value="0">select generes</option>
     <option th:each="g: ${gen}" th:value="${g.id}" th:text="${g.name}"></option>
     </select>
 </div>
 
   <div >
-    <select  name="la"   id="la">
+    <select  name="l"   id="l">
     <option value="0">select language</option>
     <option th:each="l: ${lan}" th:value="${l.iso_639_1}" th:text="${l.english_name}"></option>
     </select>
 </div>
 
-
+<input type="hidden" name="p">
       
   
   <input type="submit" name="search" value="search">
@@ -38,7 +38,9 @@
 
 </div>
 
-
+<div th:if="${listmovies}!=null">
+  <h1> My Movie List:</h1>
+ </div>
 
 <div class="card" style="flex: 0 0 18%; margin: 30px;" th:each="id:${listmovies}">
   <div th:if="${id.poster_path!=null}">

@@ -20,6 +20,8 @@ import reactor.core.publisher.Mono;
 
 @Controller
 public class UserMovieController {
+	
+	String logType;
 	WebClient webclient;	
 	@Autowired
 	UserMovieRepo usermovierepo;
@@ -29,6 +31,7 @@ public class UserMovieController {
 	
 	@Autowired
 	UserMovieRatingRepo usermovieratingrepo;
+	String username;
 	
 	public UserMovieController(WebClient.Builder webclientbuilder) {
 		this.webclient=webclientbuilder
@@ -39,9 +42,19 @@ public class UserMovieController {
 	@PostMapping("/addUserMovie")
 	public ModelAndView addUserMovie( @RequestBody MultiValueMap<String, String> formData, 
 	        @AuthenticationPrincipal OAuth2User principal) {
-		if (principal == null || principal.getAttribute("login") == null) {
+		if (principal == null) {
             return null;
         }
+		
+		 if(principal.getAttribute("iss")!=null) {
+			 logType="Google";
+			 System.out.println(logType);
+		 }
+		 else if(principal.getAttribute("login")!=null) {
+			 logType="GitHub";
+		 }
+		
+		
 		String movieid=formData.getFirst("movieid");
 		Mono<Movies> movies=this.webclient
 			    
@@ -50,7 +63,17 @@ public class UserMovieController {
 				.retrieve()
 				.bodyToMono(Movies.class);
 				 Movies mos=movies.block();
-		    String username=principal.getAttribute("login"); 
+			if(logType=="Google") {
+				 username=principal.getAttribute("email"); 
+				 System.out.println(username);
+			}
+			else if(logType=="GitHub") {
+				 username=principal.getAttribute("login"); 
+			}
+				 
+		   // String username=principal.getAttribute("login"); 
+		    System.out.println("ajscbajksncjknacjanscjknasjkcn ncoa sco onasioc");
+		    System.out.println(principal.getAttributes());
 			UserMovie usermovie=new UserMovie();
 			
 			//UserMoviePrimaryKey usmpk=new UserMoviePrimaryKey(username,movieid);
@@ -66,6 +89,7 @@ public class UserMovieController {
 			usermovie.setUsername(username);
 			usermovie.setRating(rating);
 			usermovie.setReview(review);
+			usermovie.setLogType(logType);
 			usermovierepo.save(usermovie);
 			
 			

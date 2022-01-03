@@ -4,24 +4,33 @@ spring:
       client:
         registration:
           github:
-            client-id: Iv1.67464d62a6714940
-            client-secret: 5d16783f601f8252363b321be93cbb07df6fe5d5
-       
-           
-  
+            clientId: Iv1.67464d62a6714940
+            clientSecret: 5d16783f601f8252363b321be93cbb07df6fe5d5
+          google:
+            client-id: 342023897853-41vs1ilf1v78s8d5bj6v1gqb61k33irp.apps.googleusercontent.com
+            client-secret: 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
+            
+         
+            
         
-          facebook:
-              clientId: 618775282582262
-              clientSecret: f38c55bab79124ec981cd4291b3fe74a
-              scope:
-                - email
-                - public_profile
-            
-            
-  
-            
-            
-            
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+       
+             
+         
+                     
+      
+      
+  application:
+    name: MovieToWatch            
  
   datasource:
      driverClassName: com.mysql.jdbc.Driver

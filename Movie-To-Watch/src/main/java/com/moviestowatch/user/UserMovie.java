@@ -16,7 +16,18 @@ public class UserMovie implements Serializable {
 	@Id
 	private String movieid;
 	
+	@Id
+	private String logType;
 	
+	
+	public String getLogType() {
+		return logType;
+	}
+
+	public void setLogType(String logType) {
+		this.logType = logType;
+	}
+
 	public UserMovie() {
 		
 	}

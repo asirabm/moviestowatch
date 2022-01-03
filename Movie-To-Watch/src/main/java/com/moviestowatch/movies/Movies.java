@@ -11,6 +11,24 @@ public class Movies {
 	private String overview;
 	private String id;
 	private double userRating;
+	private double vote_average;
+	private int vote_count;
+
+	public int getVote_count() {
+		return vote_count;
+	}
+
+	public void setVote_count(int vote_count) {
+		this.vote_count = vote_count;
+	}
+
+	public double getVote_average() {
+		return vote_average;
+	}
+
+	public void setVote_average(double vote_average) {
+		this.vote_average = vote_average;
+	}
 
 	public double getUserRating() {
 		return userRating;

@@ -24,6 +24,8 @@ import reactor.core.publisher.Mono;
 public class MovieSearchController {
 	private String coverUrl;
 	WebClient webclient;	
+	String userid;
+	String logType;
 	
 	@Autowired
 	UserMovieRepo usermovierepo;
@@ -51,18 +53,29 @@ public class MovieSearchController {
 		coverUrl="/images/no-image.png";
 	}
 	 
-    if(principal!=null && principal.getAttribute("login")!=null) {
- 	   String userid=principal.getAttribute("login");
+    if(principal!=null) {
+    	if(principal.getAttribute("login")!=null) {
+    		userid=principal.getAttribute("login");
+    		logType="GitHub";
+    	}
+    	else if(principal.getAttribute("iss")!=null) {
+    	 userid=principal.getAttribute("email");
+    	 logType="Google";
+    	
+    	}
+    	 //System.out.println("UserId kasncka ionac"+userid+logType);
+ 	   
+ 	  // String logType="GitHub";
  	   model.addAttribute("userid", userid);
- 	   UserMoviePrimaryKey uspk=new UserMoviePrimaryKey(userid,movieid);
+ 	   UserMoviePrimaryKey uspk=new UserMoviePrimaryKey(userid,movieid,logType);
  	   Optional<UserMovie> op=usermovierepo.findById(uspk);
  	   if(op.isPresent()) {
  		   model.addAttribute("usermovie", op.get());
- 		   System.out.println("Kkkkkkkkkkkkk");
+ 		  // System.out.println("Kkkkkkkkkkkkk");
  	   }
  	   else {
  		   model.addAttribute("usermovie",new UserMovie());
- 		  System.out.println("BBBBBBBBB");
+ 		  //System.out.println("BBBBBBBBB");
  	   }
  	   
     }
